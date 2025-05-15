@@ -6,7 +6,7 @@
 /*   By: hbettal <hbettal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:05:08 by hbettal           #+#    #+#             */
-/*   Updated: 2025/04/30 18:15:43 by hbettal          ###   ########.fr       */
+/*   Updated: 2025/05/14 01:53:49 by hbettal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int main()
     --it;
     while (it != ite)
     {
-        std::cout << *it << std::endl;
-        ++it;
+    std::cout << *it << std::endl;
+    ++it;
     }
     std::stack<int> s(mstack);
     std::cout << "============[std::list]============\n";

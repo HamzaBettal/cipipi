@@ -6,7 +6,7 @@
 /*   By: hbettal <hbettal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:48:17 by hbettal           #+#    #+#             */
-/*   Updated: 2025/04/30 18:13:24 by hbettal          ###   ########.fr       */
+/*   Updated: 2025/05/14 01:07:30 by hbettal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@
 #include <stack>
 #include <vector>
 
-
 template <typename T>
 class MutantStack : public std::stack<T>
 {
 	public:
 		typedef typename std::deque<T>::iterator iterator;
-		typedef typename std::deque<T>::const_iterator const_iterator;
+		typedef typename std::deque<T>::reverse_iterator reverse_iterator;
 		iterator begin()
 		{
 			return this->c.begin();
@@ -31,12 +30,12 @@ class MutantStack : public std::stack<T>
 		{
 			return this->c.end();
 		}
-		const_iterator begin() const
+		reverse_iterator rbegin()
 		{
-			return this->c.begin();
+			return this->c.rbegin();
 		}
-		const_iterator end() const
+		reverse_iterator rend()
 		{
-			return this->c.end();
+			return this->c.rend();
 		}
 };

@@ -6,7 +6,7 @@
 /*   By: hbettal <hbettal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:59:36 by hbettal           #+#    #+#             */
-/*   Updated: 2025/05/01 18:59:55 by hbettal          ###   ########.fr       */
+/*   Updated: 2025/05/08 01:07:40 by hbettal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ class PmergeMe
 		
 		void 							saveData( int ac, char **av );
 		void 							pairing( void );
-		std::vector<std::vector<int> > &getPairs();
+		std::vector<std::pair<int, int> > getPairs();
+		std::vector<std::vector<int> > recurVec( size_t pairSize );
 };

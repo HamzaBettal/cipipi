@@ -6,13 +6,12 @@
 /*   By: hbettal <hbettal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:01:03 by hbettal           #+#    #+#             */
-/*   Updated: 2025/04/30 16:17:17 by hbettal          ###   ########.fr       */
+/*   Updated: 2025/05/14 00:47:00 by hbettal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
-#include <exception>
-#include <iostream>
+
 int main()
 {
     try
