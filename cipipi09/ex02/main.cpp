@@ -21,7 +21,7 @@ int main(int ac, char **av)
         if (ac <= 2)
             throw "Error: you need at least 2 numbers.";
         sorter.saveData(ac, av);
-        sorter.pairing();
+        sorter.recurSort();
     }
     catch ( char const *e )
     {

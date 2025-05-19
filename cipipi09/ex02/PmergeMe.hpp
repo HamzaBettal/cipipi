@@ -15,16 +15,16 @@
 #include <cstddef>
 #include <deque>
 #include <iostream>
-#include <ratio>
 #include <vector>
 #include <utility>
 
+typedef std::vector<std::vector<unsigned int> > mapp;
 
 class PmergeMe
 {
 	private:
-        std::vector<int> vec;
-		std::deque<int> deq;
+        std::vector<unsigned int> vec;
+		std::deque<unsigned int> deq;
 		
 	public:
 		PmergeMe();
@@ -33,8 +33,6 @@ class PmergeMe
 
 		PmergeMe &operator=( const PmergeMe &other );
 		
-		void 							saveData( int ac, char **av );
-		void 							pairing( void );
-		std::vector<std::pair<int, int> > getPairs();
-		std::vector<std::vector<int> > recurVec( size_t pairSize );
+		void	saveData( int ac, char **av );
+		void	recurSort( size_t pairSize = 1 );
 };
