@@ -11,7 +11,10 @@
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-
+#include <cmath>
+#include <cstddef>
+#include <vector>
+//Un = 2^n - Un-1
 PmergeMe::PmergeMe()
 {}
 
@@ -33,21 +36,24 @@ PmergeMe &PmergeMe::operator=( const PmergeMe &other )
 	return *this;
 }
 
-void PmergeMe::saveData( int ac, char **av )
+void	PmergeMe::saveData( int ac, char **av )
 {
 	this->vec.resize(ac - 1);
-	this->deq.resize(ac - 1);
 
 	for (int i = 1; i < ac; i++)
 	{
 		if (!std::isdigit(av[i][0]))
 			throw "Error: require numbers only.";
-		this->deq[i - 1] = std::atol(av[i]);
 		this->vec[i - 1] = std::atol(av[i]);
 	}
 }
 
-void binarySearch( mapp &main, mapp &pend , size_t pairSize )
+unsigned int getNextUn(unsigned int n, unsigned int prev_Un)
+{
+	return (pow(2, n) - prev_Un);
+}
+
+void binarySearch( vecMap &main, vecMap &pend, size_t pairSize , size_t index )
 {
 	ssize_t left = 0;
 	ssize_t right = main.size() - 1;
@@ -56,21 +62,21 @@ void binarySearch( mapp &main, mapp &pend , size_t pairSize )
 	while (left <= right)
 	{
 		mid = left + (right - left) / 2;
-		if (main[mid][pairSize - 1] > pend[0][pairSize - 1])
+		if (main[mid][pairSize - 1] > pend[index][pairSize - 1])
 			right = mid - 1;
 		else
 			left = mid + 1;
 	}
-	main.insert(main.begin() + left, pend[0]);
-	pend.erase(pend.begin());
+	main.insert(main.begin() + left, pend[index]);
 }
 
-void PmergeMe::recurSort( size_t pairSize )
+void	PmergeMe::recurSort( size_t pairSize )
 {
-	mapp seqq(vec.size() / pairSize);
-	size_t k = 0;
+	vecMap seqq(vec.size() / pairSize);
+
 	if (seqq.size() < 2)
 		return ;
+	size_t k = 0;
 	for (size_t i = 0; i < seqq.size(); i++)
 	{
 		seqq[i].assign(vec.begin() + k, vec.begin() + k + pairSize);
@@ -81,44 +87,36 @@ void PmergeMe::recurSort( size_t pairSize )
 		if (seqq[i][pairSize - 1] > seqq[i + 1][pairSize - 1])
 			std::swap(seqq[i], seqq[i + 1]);
 	}
-	k = 0;
-	for (size_t i = 0; i < seqq.size(); i++)
-	{
-		std::copy(seqq[i].begin(), seqq[i].end(), vec.begin() + k);
-		k += pairSize;
-	}
+	copyContainer(vec, seqq, pairSize);
 	recurSort(pairSize * 2);
 	k = 0;
-	for (size_t i = 0; i < seqq.size(); i++)
-	{
+	for (size_t i = 0; i < seqq.size(); i++, k += pairSize)
 		std::copy(vec.begin() + k, vec.begin() + k + pairSize, seqq[i].begin());
-		k += pairSize;
-	}
-	mapp main;
-	mapp pend;
+	vecMap main;
+	vecMap pend;
 	//adding the minimest b to main container
 	main.push_back(seqq[0]);
 	for (size_t i = 1; i < seqq.size(); i += 2)
 	{
 		main.push_back(seqq[i]);
 		if (i + 1 < seqq.size())
+		{
+
 			pend.push_back(seqq[i + 1]);
+		}
 	}
-	while (pend.size() > 0)
-		binarySearch(main, pend, pairSize);
+	for (size_t i = 0; i < pend.size(); i++)
+	{
+
+		binarySearch(main, pend, pairSize, i);
+	}
 	for (size_t i = 0; i < main.size(); i++)
 	{
 		for (size_t j = 0; j < main[i].size(); j++)
-		{
 			std::cout << main[i][j] << " ";
-		}
 		std::cout << "| ";
 	}
 	std::cout << '\n';
-	k = 0;
-	for (size_t i = 0; i < main.size(); i++)
-	{
-		std::copy(main[i].begin(), main[i].end(), vec.begin() + k);
-		k += pairSize;
-	}
-}
+	copyContainer(vec, main, pairSize);
+	return ;
+};

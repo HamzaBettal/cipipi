@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
+#include <vector>
 
 int main(int ac, char **av)
 {
@@ -21,7 +22,8 @@ int main(int ac, char **av)
         if (ac <= 2)
             throw "Error: you need at least 2 numbers.";
         sorter.saveData(ac, av);
-        sorter.recurSort();
+        sorter.recurSort(1);
+        sorter.is_it_sorted();
     }
     catch ( char const *e )
     {

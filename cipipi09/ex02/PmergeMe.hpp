@@ -17,16 +17,35 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+//(2^(k+1)+(-1)^k)/3
 
-typedef std::vector<std::vector<unsigned int> > mapp;
+typedef std::vector<std::vector<unsigned int> > vecMap;
+typedef std::vector<std::vector<unsigned int> > deqMap;
+template <typename F, typename T>
+void copyContainer( F &from, T &to, size_t pairSize )
+{
+	size_t k = 0;
+	for (size_t i = 0; i < to.size(); i++, k += pairSize)
+		std::copy(to[i].begin(), to[i].end(), from.begin() + k);
+};
 
+// template <typename Cont>
 class PmergeMe
 {
 	private:
         std::vector<unsigned int> vec;
-		std::deque<unsigned int> deq;
-		
+        std::deque<unsigned int> deq;
+
 	public:
+		void	is_it_sorted()
+		{
+			for(size_t i = 0; i < vec.size(); i++)
+				if (i + 1 < vec.size())
+					if (vec[i] > vec[i +1])
+					{
+						std::cout << "not sorted" << vec[i] << "/n";
+					}
+		};
 		PmergeMe();
 		PmergeMe( const PmergeMe &other );
 		~PmergeMe();
@@ -34,5 +53,5 @@ class PmergeMe
 		PmergeMe &operator=( const PmergeMe &other );
 		
 		void	saveData( int ac, char **av );
-		void	recurSort( size_t pairSize = 1 );
+		void	recurSort( size_t pairSize );
 };
