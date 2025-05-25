@@ -14,15 +14,16 @@
 
 int main( void )
 {
-    Fixed a;
-    Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+    Fixed a(0);
+    float n = 1.0f / 3;
+    std::cout << n << std::endl;
+    // std::cout << ++a << std::endl;
+    // Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
 
-    std::cout << a << std::endl;
-    std::cout << ++a << std::endl;
-    std::cout << a << std::endl;
-    std::cout << a++ << std::endl;
-    std::cout << a << std::endl;
-    std::cout << b << std::endl;
-    std::cout << Fixed::max( a, b ) << std::endl;
+    // std::cout << a << std::endl;
+    // std::cout << a++ << std::endl;
+    // std::cout << a << std::endl;
+    // std::cout << b << std::endl;
+    // std::cout << Fixed::max( a, b ) << std::endl;
     return 0;
 }
