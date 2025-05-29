@@ -19,7 +19,7 @@
 class RPN
 {
 	private:
-        std::stack<int> stack;
+        std::stack<double> stack;
 		
 	public:
 		RPN();

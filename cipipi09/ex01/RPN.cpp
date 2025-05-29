@@ -38,12 +38,12 @@ bool	RPN::isOperator( const char c )
 
 void	RPN::calcule( const char op )
 {
-	int a, b;
-	if (stack.size() != 2)
+	double a, b;
+	if (stack.size() < 2)
 		throw "Error";
-	a = stack.top();
-	stack.pop();
 	b = stack.top();
+	stack.pop();
+	a = stack.top();
 	stack.pop();
 	switch (op)
 	{
@@ -59,7 +59,7 @@ void	RPN::calcule( const char op )
 		case '/':
 			if (a == 0)
 				throw "Error: Division by zero!";
-			stack.push(b / a);
+			stack.push(a / b);
 	}
 }
 
@@ -69,8 +69,6 @@ void	RPN::act( const std::string &av )
 	{
 		if (std::isdigit(av[i]))
 		{
-			if (stack.size() >= 2)
-				throw "Error";
 			stack.push(av[i] - '0');
 		}
 		if (isOperator(av[i]))

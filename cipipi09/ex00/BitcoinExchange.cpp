@@ -45,7 +45,7 @@ std::string &BitcoinExchange::getValue( const std::string &key )
 	return it->second;
 }
 
-std::vector<std::string> BitcoinExchange::split(const std::string& s, char d)
+std::vector<std::string> BitcoinExchange::split( const std::string &s, char d )
 {
     std::vector<std::string>	tokens;
     std::istringstream	iss(s);
@@ -56,11 +56,21 @@ std::vector<std::string> BitcoinExchange::split(const std::string& s, char d)
     return tokens;
 }
 
-bool	isDigit( const std::string &str)
+bool	isDigit( const std::string &str, bool f )
 {
+	size_t point = 0;
+
 	for (size_t i = 0; i < str.size(); i++)
 	{
-		if (!std::isdigit(str[i]))
+		if (str[0] == '-')
+			continue;
+		if (str[i] == '.' && f)
+		{
+			if (point > 0 || i + 1 >= str.size())
+				return false;
+			point++;
+		}
+		else if (!std::isdigit(str[i]))
 			return false;
 	}
 	return true;
@@ -71,14 +81,14 @@ void checkDate( std::string &line )
 	std::vector<std::string> date = BitcoinExchange::split(line, '-');
 	int mounts[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	
-	if (date.size() != 3)
+	if (date.size() != 3 || line[line.size() - 1] == '-')
 		throw "Bad input => " + line;
 	std::
 	size_t num;
-	if (!isDigit(date[0]) || !isDigit(date[1]) || !isDigit(date[2]))
+	if (!isDigit(date[0], false) || !isDigit(date[1], false) || !isDigit(date[2], false))
 		throw "Bad input => " + line;
 	num = std::atoi(date[0].c_str());
-	if (num > static_cast<size_t>(std::numeric_limits<int>::max()))
+	if (num > 9999 || num < 1000)
 		throw "Bad input => " + line;
 	num = std::atoi(date[1].c_str());
 	if (num < 1 || num > 12)
@@ -96,20 +106,17 @@ void	BitcoinExchange::printValue( std::string &line )
 {
 	std::vector<std::string> str = BitcoinExchange::split(line, ' ');
 
-	if (str.size() != 3)
+	if (str.size() != 3 || str[1] != "|" || !isDigit(str[2], true))
 	{
 		std::cerr << "Error: Bad input => " + line << std::endl;
 		return ;	
 	}
 	std::stringstream ss(str[2]);
 	double num;
+	if (str[2][0] == '-')
+		throw std::string("not a positive number.");
 	if (!(ss >> num) || num > 1000)
-	{
-		if (str[2][0] == '-')
-			throw "not a positive number.";
-		else
-			throw "too large a number.";
-	}
+		throw std::string("too large a number.");
 	checkDate(str[0]);
 	double value = std::atof(this->getValue(str[0]).c_str());
 	std::cout << " => " << str[2] << " = " << value * num << std::endl;
@@ -136,7 +143,8 @@ void	BitcoinExchange::exchange( std::ifstream &infile, std::ifstream &dataFile )
 		std::getline(infile, line);
 		try
 		{
-			this->printValue(line);
+			if (!line.empty())
+				this->printValue(line);
 		}
 		catch ( const std::string &e )
 		{

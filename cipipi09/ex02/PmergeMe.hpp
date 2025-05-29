@@ -12,10 +12,10 @@
 
 #pragma once
 
-#include <cstddef>
 #include <deque>
 #include <iostream>
 #include <vector>
+#include <sys/time.h>
 
 typedef std::vector<std::vector<unsigned int> > vecMap;
 typedef std::vector<std::vector<unsigned int> > deqMap;
@@ -34,24 +34,15 @@ class PmergeMe
         std::deque<unsigned int> deq;
 
 	public:
-		void	is_it_sorted()
-		{
-			for(size_t i = 0; i < vec.size(); i++)
-				if (i + 1 < vec.size())
-				{
-					std::cout << deq[i] << " ";
-					if (vec[i] > vec[i +1])
-						std::cout << "not sorted" << vec[i] << "/n";
-				}
-		};
 		PmergeMe();
 		PmergeMe( const PmergeMe &other );
 		~PmergeMe();
 
 		PmergeMe &operator=( const PmergeMe &other );
 		
-		void	saveData( int ac, char **av );
-		void	recurSort();
+		void	saveVecData( int ac, char **av );
+		void	saveDeqData( int ac, char **av );
+		void	printData( int ac, char **av );
 		void	sortVec( size_t pairSize );
 		void	sortDeq( size_t pairSize );
 };

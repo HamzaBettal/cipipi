@@ -36,27 +36,31 @@ PmergeMe &PmergeMe::operator=( const PmergeMe &other )
 	}
 	return *this;
 }
-// $> ./PmergeMe 3 5 9 7 4
-// Before: 3 5 9 7 4
-// After: 3 4 5 7 9
-// Time to process a range of 5 elements with std::[..] : 0.00031 us
-// Time to process a range of 5 elements with std::[..] : 0.00014 us
-void	PmergeMe::saveData( int ac, char **av )
+
+double getTime()
+{
+    timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec * 1000000.0 + tv.tv_usec;
+}
+
+void	PmergeMe::saveVecData( int ac, char **av )
 {
 	this->vec.resize(ac - 1);
+
+	for (int i = 1; i < ac; i++)
+		this->vec[i - 1] = std::atol(av[i]);
+}
+void	PmergeMe::saveDeqData( int ac, char **av )
+{
 	this->deq.resize(ac - 1);
 
 	for (int i = 1; i < ac; i++)
 	{
 		if (!std::isdigit(av[i][0]))
 			throw "Error";
-		this->vec[i - 1] = std::atol(av[i]);
 		this->deq[i - 1] = std::atol(av[i]);
 	}
-	std::cout << "Before: ";
-	for (size_t i = 0; i < vec.size(); i++)
-		std::cout << vec[i] << ' ';
-	std::cout << std::endl;
 }
 
 unsigned int getNextUn(unsigned int n, unsigned int prev_Un)
@@ -80,11 +84,30 @@ void binarySearch( vecMap &main, vecMap &pend, size_t pairSize, ssize_t right, s
 	main.insert(main.begin() + left, pend[index]);
 }
 
-void	PmergeMe::recurSort()
+void	PmergeMe::printData(int ac, char **av)
 {
-	sortVec(1);
+	double start, end, mid1, mid2;
+
+	start = getTime();
+	saveDeqData(ac, av);
+	mid1 = getTime();
+	std::cout << "Before: ";
+	for (size_t i = 0; i < deq.size(); i++)
+		std::cout << deq[i] << ' ';
+	std::cout << std::endl;
+	mid2 = getTime();
 	sortDeq(1);
-	return ;
+	end = getTime();
+	std::cout << "After: ";
+	for (size_t i = 0; i < deq.size(); i++)
+		std::cout << deq[i] << ' ';
+	std::cout << std::endl;
+	std::cout << "Time to process a range of " << deq.size() << " elements with std::deque : " << end - mid2 - start + mid1 << " us" << std::endl;
+	start = getTime();
+	saveVecData(ac, av);
+	sortVec(1);
+	end = getTime();
+	std::cout << "Time to process a range of " << vec.size() << " elements with std::vector : " << end - start << " us" << std::endl;
 }
 
 void	PmergeMe::sortVec( size_t pairSize )
