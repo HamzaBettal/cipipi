@@ -74,7 +74,7 @@ void	RPN::act( const std::string &av )
 		if (isOperator(av[i]))
 			calcule(av[i]);
 	}
-	if (stack.size() > 1)	
+	if (stack.size() != 1)
 		throw "Error";
 	std::cout << stack.top() << std::endl;
 }
