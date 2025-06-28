@@ -32,6 +32,7 @@ class PmergeMe
 	private:
         std::vector<unsigned int> vec;
         std::deque<unsigned int> deq;
+		ssize_t lenght;
 
 	public:
 		PmergeMe();

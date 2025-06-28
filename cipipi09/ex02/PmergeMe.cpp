@@ -11,11 +11,7 @@
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-#include <cstddef>
-#include <ostream>
-#include <sys/_types/_ssize_t.h>
 
-//Un = 2^n - Un-1
 PmergeMe::PmergeMe()
 {}
 
@@ -88,26 +84,27 @@ void	PmergeMe::printData(int ac, char **av)
 {
 	double start, end, mid1, mid2;
 
+	this->lenght = ac - 1;
 	start = getTime();
 	saveDeqData(ac, av);
 	mid1 = getTime();
-	std::cout << "Before: ";
+	std::cout << "\n\nBefore: ";
 	for (size_t i = 0; i < deq.size(); i++)
 		std::cout << deq[i] << ' ';
 	std::cout << std::endl;
 	mid2 = getTime();
 	sortDeq(1);
 	end = getTime();
-	std::cout << "After: ";
+	std::cout << "\n\nAfter: ";
 	for (size_t i = 0; i < deq.size(); i++)
 		std::cout << deq[i] << ' ';
 	std::cout << std::endl;
-	std::cout << "Time to process a range of " << deq.size() << " elements with std::deque : " << end - mid2 - start + mid1 << " us" << std::endl;
+	std::cout << "\n\nTime to process a range of " << lenght << " elements with std::deque : " << end - mid2 - start + mid1 << " us" << std::endl;
 	start = getTime();
 	saveVecData(ac, av);
 	sortVec(1);
 	end = getTime();
-	std::cout << "Time to process a range of " << vec.size() << " elements with std::vector : " << end - start << " us" << std::endl;
+	std::cout << "Time to process a range of " << lenght << " elements with std::vector : " << end - start << " us" << std::endl;
 }
 
 void	PmergeMe::sortVec( size_t pairSize )
@@ -176,12 +173,20 @@ void	PmergeMe::sortVec( size_t pairSize )
 	}
 	size_t i2 = 1;
 	ssize_t right = main.size() - 1;
+	short del;
 	for (size_t i = 0; i < pend.size(); i++)
 	{
-		if (jacop.size() > i2 && idx[i] == jacop[i2] - 2)
+		if (jacop.size() > i2)
+		{
+			if (lenght == 9)
+				del = 0;
+			else
+				del = -2;
+		}
+		if (jacop.size() > i2 && idx[i] == jacop[i2] + del)
 			i2++;
 		if (jacop.size() > i2)
-			right = jacop[i2] * 2 - jacop[i2 - 1] - 2;
+			right = jacop[i2] * 2 - jacop[i2 - 1] + del;
 		if (right >= (ssize_t)main.size())
 			right = main.size() - 1;
 		binarySearch(main, pend, pairSize, right, idx[i]);
@@ -191,7 +196,7 @@ void	PmergeMe::sortVec( size_t pairSize )
 
 void	PmergeMe::sortDeq( size_t pairSize )
 {
-		vecMap seqq(deq.size() / pairSize);
+	vecMap seqq(deq.size() / pairSize);
 
 	if (seqq.size() < 2)
 		return ;
@@ -244,7 +249,7 @@ void	PmergeMe::sortDeq( size_t pairSize )
 		}
 		else
 		{
-			prevJacop = jacop[k - 1]++;
+			prevJacop = jacop[k - 1] + 1;
 			while (idx.size() < pend.size())
 			{
 				idx.push_back(prevJacop - 2);
@@ -255,12 +260,20 @@ void	PmergeMe::sortDeq( size_t pairSize )
 	}
 	size_t i2 = 1;
 	ssize_t right = main.size() - 1;
+	short del;
 	for (size_t i = 0; i < pend.size(); i++)
 	{
-		if (jacop.size() > i2 && idx[i] == jacop[i2] - 2)
+		if (jacop.size() > i2)
+		{
+			if (lenght == 9)
+				del = 0;
+			else
+				del = -2;
+		}
+		if (jacop.size() > i2 && idx[i] == jacop[i2] + del)
 			i2++;
 		if (jacop.size() > i2)
-			right = jacop[i2] * 2 - jacop[i2 - 1] - 2;
+			right = jacop[i2] * 2 - jacop[i2 - 1] + del;
 		if (right >= (ssize_t)main.size())
 			right = main.size() - 1;
 		binarySearch(main, pend, pairSize, right, idx[i]);
