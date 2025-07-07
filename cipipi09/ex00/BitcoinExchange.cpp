@@ -6,11 +6,12 @@
 /*   By: hbettal <hbettal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 12:34:05 by hbettal           #+#    #+#             */
-/*   Updated: 2025/04/25 16:22:28 by hbettal          ###   ########.fr       */
+/*   Updated: 2025/06/28 18:22:35 by hbettal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
+#include <algorithm>
 
 BitcoinExchange::BitcoinExchange()
 {}
@@ -40,7 +41,8 @@ std::string &BitcoinExchange::getValue( const std::string &key )
 	std::map<std::string, std::string>::iterator fr = ++data.begin();
 	if (it == fr)
 		throw "Bad input => " + key;
-	it--;
+	if (it->first != key)
+		it--;
 	std::cout << it->first;
 	return it->second;
 }
@@ -79,23 +81,21 @@ bool	isDigit( const std::string &str, bool f )
 void checkDate( std::string &line )
 {
 	std::vector<std::string> date = BitcoinExchange::split(line, '-');
-	int mounts[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-	
+	int mounts[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
 	if (date.size() != 3 || line[line.size() - 1] == '-')
 		throw "Bad input => " + line;
-	std::
 	size_t num;
 	if (!isDigit(date[0], false) || !isDigit(date[1], false) || !isDigit(date[2], false))
 		throw "Bad input => " + line;
 	num = std::atoi(date[0].c_str());
 	if (num > 9999 || num < 1000)
 		throw "Bad input => " + line;
+	if ((num % 4 == 0) && ((num % 100 != 0) || (num % 400 == 0)))
+		mounts[1] = 29;
 	num = std::atoi(date[1].c_str());
-	if (num < 1 || num > 12)
+	if ((num < 1 || num > 12) || date[1].length() != 2 || date[2].size() != 2)
 		throw "Bad input => " + line;
-	if (num < 10 && date[1][0] != '0')
-		throw "Bad input => " + line;
-	num = std::atoi(date[1].c_str());
 	size_t mount = mounts[num - 1];
 	num = std::atoi(date[2].c_str());
 	if (num < 1 || num > mount)
